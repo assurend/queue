@@ -7,7 +7,7 @@
 
 #include <stdliib.h>
 #include <pthread.h>
-#include "queue.h"
+#include "queue/queue.h"
 
 #define ERROR -1
 
