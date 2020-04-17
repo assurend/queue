@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <pthread.h>
+
+static pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct Node
 {
@@ -29,13 +32,26 @@ int front()
     }
     else
     {
-        printf("No elements in Queue");
+        printf("No elements in Queue\n");
         return -1;
     }
 }
 
+int back()
+{
+    if(!empty())
+    {
+        return queueRear->data;
+    }
+    else
+    {
+        printf("No elements in Queue\n");
+        return -1;
+    }
+}
 void push(int data)
 {
+    pthread_mutex_lock(&queue_mutex);
     Node* newEntry =  (Node*)malloc(sizeof(Node));
     if(NULL != newEntry)
     {
@@ -63,20 +79,24 @@ void push(int data)
     {
         printf("No space left in Queue");
     }
+    pthread_mutex_unlock(&queue_mutex);
 }
 
 int pop(void)
 {
+    pthread_mutex_lock(&queue_mutex);
     if(empty())
     {
-        printf("Stack is empty");
+        printf("Queue is empty\n");
         return -1;
     }
         
     Node* temp = queueFront;
-    int a = temp-> data;
+    int data = temp->data;
     queueFront = queueFront->next;
     free(temp);
     queueCount--;
-    return a;
+
+    pthread_mutex_unlock(&queue_mutex);
+    return data;
 }
