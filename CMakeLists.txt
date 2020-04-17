@@ -17,5 +17,3 @@ set(SOURCES
 
 add_library(queue STATIC ${SOURCES})
 install(TARGETS queue DESTINATION ${PROJECT_SOURCE_DIR}/build/lib/)
-
-add_subdirectory(test)
